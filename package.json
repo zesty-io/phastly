@@ -4,7 +4,7 @@
   "description": "functional fastly api with promises",
   "main": "src/index.js",
   "scripts": {
-    "test": "ava test"
+    "test": "ava test -r ./test-bootstrap.js ./test/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
     "api",
     "client"
   ],
-  "author": "Chris Hiestand <chris@oakleon.com>",
+  "author": "Chris Hiestand <chris@zesty.io>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/zesty-io/fastlier/issues"
@@ -30,7 +30,9 @@
     "babel-plugin-transform-runtime": "^6.12.0",
     "babel-preset-es2016-node4": "^6.0.1",
     "babel-preset-stage-3": "^6.11.0",
+    "chance": "^1.0.4",
     "del": "^2.2.1",
+    "dotenv": "^2.0.0",
     "eslint": "^3.2.2",
     "eslint-config-standard": "^5.3.5",
     "eslint-plugin-promise": "1.1.0",
@@ -40,7 +42,9 @@
     "gulp-cached": "^1.1.0"
   },
   "dependencies": {
+    "babel-runtime": "^6.11.6",
     "bluebird": "^3.4.1",
+    "ramda": "^0.21.0",
     "request-promise": "^4.1.0"
   }
 }
