@@ -13,6 +13,8 @@
   "keywords": [
     "fastly",
     "promise",
+    "promises",
+    "functional",
     "cdn",
     "api",
     "client"
