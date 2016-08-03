@@ -15,10 +15,10 @@ In development and does not immediately seek to cover all endpoints but open to 
 ```js
 import * as fastly from 'phastly'
 
-function setup() {
-  fastly.createService(service.name)
+async function setup(name) {
+  fastly.createService(name)
   .then((newService) => {
-    //use newService here
+    // use newService here
   })
 }
 ```
@@ -27,7 +27,8 @@ function setup() {
 ```js
 import * as fastly from 'phastly'
 
-async function setup() {
-  let newService = await fastly.createService(service.name)
+async function setup(name) {
+  let newService = await fastly.createService(name)
+  // use newService here
 }
 ```
