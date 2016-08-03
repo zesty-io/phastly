@@ -1,7 +1,7 @@
 {
   "name": "phastly",
   "version": "0.0.2",
-  "description": "(P)romises for (f)astly - functional fastly api with promises",
+  "description": "(Ph)romises for F(astly) - functional fastly api with promises",
   "main": "build/index.js",
   "scripts": {
     "test": "ava test -r ./test-bootstrap.js ./test/**/*.test.js"
@@ -19,9 +19,9 @@
   "author": "Chris Hiestand <chris@zesty.io>",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/zesty-io/fastlier/issues"
+    "url": "https://github.com/zesty-io/phastly/issues"
   },
-  "homepage": "https://github.com/zesty-io/fastlier#readme",
+  "homepage": "https://github.com/zesty-io/phastly#readme",
   "devDependencies": {
     "ava": "^0.15.2",
     "babel-core": "^6.11.4",
