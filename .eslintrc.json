@@ -1,0 +1,21 @@
+{
+  "env": {
+      "es6": true,
+      "mocha": true,
+      "node": true
+  },
+  "root": true,
+  "extends": "standard",
+  "parser": "babel-eslint",
+  "rules": {
+    "comma-dangle": ["off"],
+    "generator-star-spacing": 0,
+    "padded-blocks": 0,
+    "spaced-comment": 0,
+    "space-before-function-paren": [1, "never"],
+    "no-new": 0,
+    "no-multiple-empty-lines": ["error", {"max": 2}],
+    "no-multi-spaces": ["off"],
+    "no-unused-vars": ["warn"]
+  }
+}
