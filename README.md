@@ -15,7 +15,7 @@ In development and does not immediately seek to cover all endpoints but open to 
 ```js
 import * as fastly from 'phastly'
 
-async function setup(name) {
+function setup(name) {
   fastly.createService(name)
   .then((newService) => {
     // use newService here
