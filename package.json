@@ -12,6 +12,7 @@
   },
   "keywords": [
     "fastly",
+    "promise",
     "cdn",
     "api",
     "client"
