@@ -1,8 +1,8 @@
 {
-  "name": "fastlier",
+  "name": "phastly",
   "version": "0.0.1",
-  "description": "functional fastly api with promises",
-  "main": "src/index.js",
+  "description": "(P)romises for (f)astly - functional fastly api with promises",
+  "main": "build/index.js",
   "scripts": {
     "test": "ava test -r ./test-bootstrap.js ./test/**/*.test.js"
   },
@@ -17,7 +17,7 @@
     "client"
   ],
   "author": "Chris Hiestand <chris@zesty.io>",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/zesty-io/fastlier/issues"
   },
