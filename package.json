@@ -1,7 +1,7 @@
 {
   "name": "phastly",
   "version": "0.0.8",
-  "description": "(Ph)romises for F(astly) - functional fastly api with promises",
+  "description": "(P)romises for F(hastly) - functional fastly api with promises",
   "main": "build/index.js",
   "scripts": {
     "test": "ava test -r ./test-bootstrap.js ./test/**/*.test.js"
