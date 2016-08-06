@@ -9,6 +9,53 @@ let fastlyApiKey = process.env.FASTLY_API_KEY
 **/
 
 /**
+ * Wrapper to send a fastly api request. Use this if the endpoint you need hasn't been mapped to a function.
+ * @param  {Object} request options: baseUrl (string), form (object), endpoint (string), headers (object), method (string), timeout (number)
+ * @return {Promise} resolving to response
+ */
+export function sendP({baseUrl, form, endpoint = '', headers = {}, method = 'GET', timeout = 5000}) {
+
+  if (!fastlyApiKey) {
+    throw new Error('Fastly API Key missing, try setting env var FASTLY_API_KEY')
+  }
+
+  baseUrl = baseUrl || 'https://api.fastly.com'
+
+  const url       = `${baseUrl}/${endpoint}`
+
+  if (url === '/') {
+    throw new Error('missing baseUrl and/or endpoint!')
+  }
+
+  const defaultHeaders = {
+    'Fastly-Key': fastlyApiKey,
+    'Accept': 'application/json'
+  }
+
+  const sendHeaders = ramda.merge(defaultHeaders, headers)
+
+  const options = {
+    form,
+    headers: sendHeaders,
+    method,
+    timeout,
+    url,
+  }
+
+  return request(options)
+  .then((response) => {
+
+    if (!response) {
+      let optionsLog = options
+      delete optionsLog.headers['Fastly-Key']
+      throw new Error(`request failed with sanitized options: ${JSON.stringify(optionsLog)}`)
+    }
+
+    return JSON.parse(response)
+  })
+}
+
+/**
  * Instant Purge a particular service of items tagged with a Surrogate Key. Soft Purging sets an object's TTL to 0s, forcing revalidation. For best results, Soft Purging should be used in conjuction with stale_while_revalidate and stale_if_error.
  * @param  {string}  serviceId
  * @param  {string}  key
@@ -332,51 +379,4 @@ export function updateSettingsP(serviceId, version, settings) {
  */
 export function setApiKey(key) {
   fastlyApiKey = key
-}
-
-/**
- * Wrapper to send a fastly api request. Not for external use unless you want to send a custom request.
- * @param  {Object} request options: baseUrl (string), form (object), endpoint (string), headers (object), method (string), timeout (number)
- * @return {Promise} resolving to response
- */
-export function sendP({baseUrl, form, endpoint = '', headers = {}, method = 'GET', timeout = 5000}) {
-
-  if (!fastlyApiKey) {
-    throw new Error('Fastly API Key missing, try setting env var FASTLY_API_KEY')
-  }
-
-  baseUrl = baseUrl || 'https://api.fastly.com'
-
-  const url       = `${baseUrl}/${endpoint}`
-
-  if (url === '/') {
-    throw new Error('missing baseUrl and/or endpoint!')
-  }
-
-  const defaultHeaders = {
-    'Fastly-Key': fastlyApiKey,
-    'Accept': 'application/json'
-  }
-
-  const sendHeaders = ramda.merge(defaultHeaders, headers)
-
-  const options = {
-    form,
-    headers: sendHeaders,
-    method,
-    timeout,
-    url,
-  }
-
-  return request(options)
-  .then((response) => {
-
-    if (!response) {
-      let optionsLog = options
-      delete optionsLog.headers['Fastly-Key']
-      throw new Error(`request failed with sanitized options: ${JSON.stringify(optionsLog)}`)
-    }
-
-    return JSON.parse(response)
-  })
 }

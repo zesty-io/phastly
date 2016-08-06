@@ -75,6 +75,7 @@ phastly module.
 
 
 * [phastly](#module_phastly)
+    * [.sendP(request)](#module_phastly.sendP) ⇒ <code>Promise</code>
     * [.purgeP(serviceId, key, [soft])](#module_phastly.purgeP) ⇒ <code>Promise</code>
     * [.purgeUrlP(url, [soft])](#module_phastly.purgeUrlP) ⇒ <code>Promise</code>
     * [.purgeAllP(serviceId)](#module_phastly.purgeAllP) ⇒ <code>Promise</code>
@@ -99,7 +100,18 @@ phastly module.
     * [.createRequestSettingP(serviceId, version, settings)](#module_phastly.createRequestSettingP) ⇒ <code>Promise</code>
     * [.updateSettingsP(serviceId, version, settings)](#module_phastly.updateSettingsP) ⇒ <code>Promise</code>
     * [.setApiKey(key)](#module_phastly.setApiKey)
-    * [.sendP(request)](#module_phastly.sendP) ⇒ <code>Promise</code>
+
+<a name="module_phastly.sendP"></a>
+
+### phastly.sendP(request) ⇒ <code>Promise</code>
+Wrapper to send a fastly api request. Use this if the endpoint you need hasn't been mapped to a function.
+
+**Kind**: static method of <code>[phastly](#module_phastly)</code>  
+**Returns**: <code>Promise</code> - resolving to response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| request | <code>Object</code> | options: baseUrl (string), form (object), endpoint (string), headers (object), method (string), timeout (number) |
 
 <a name="module_phastly.purgeP"></a>
 
@@ -403,18 +415,6 @@ set or change the fastly api key
 | Param | Type | Description |
 | --- | --- | --- |
 | key | <code>string</code> | your fastly api key |
-
-<a name="module_phastly.sendP"></a>
-
-### phastly.sendP(request) ⇒ <code>Promise</code>
-Wrapper to send a fastly api request. Not for external use unless you want to send a custom request.
-
-**Kind**: static method of <code>[phastly](#module_phastly)</code>  
-**Returns**: <code>Promise</code> - resolving to response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| request | <code>Object</code> | options: baseUrl (string), form (object), endpoint (string), headers (object), method (string), timeout (number) |
 
 
 ## Documentation
