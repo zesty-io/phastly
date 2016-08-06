@@ -6,6 +6,11 @@ if (!process.env.FASTLY_API_KEY) {
 }
 
 /**
+ * phastly module.
+ * @module phastly
+**/
+
+/**
  * send the fastly request
  * @param  {Object} request options
  * @return {Promise} resolving to response
