@@ -349,17 +349,14 @@ export function sendP({baseUrl, form, endpoint = '', headers = {}, method = 'GET
     'Accept': 'application/json'
   }
 
-  let sendHeaders = ramda.merge(defaultHeaders, headers)
+  const sendHeaders = ramda.merge(defaultHeaders, headers)
 
   const options = {
-    method,
-    url,
+    form,
     headers: sendHeaders,
+    method,
     timeout,
-  }
-
-  if (form) {
-    options.form = form
+    url,
   }
 
   return request(options)
@@ -368,7 +365,7 @@ export function sendP({baseUrl, form, endpoint = '', headers = {}, method = 'GET
     if (!response) {
       let optionsLog = options
       delete optionsLog.headers['Fastly-Key']
-      throw new Error(`request failed with options: ${JSON.stringify(optionsLog)}`)
+      throw new Error(`request failed with sanitized options: ${JSON.stringify(optionsLog)}`)
     }
 
     return JSON.parse(response)
