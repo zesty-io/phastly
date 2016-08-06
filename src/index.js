@@ -1,7 +1,6 @@
 import request from 'request-promise'
 import ramda from 'ramda'
 
-
 if (!process.env.FASTLY_API_KEY) {
   throw new Error('Missing env var FASTLY_API_KEY')
 }
@@ -11,7 +10,7 @@ if (!process.env.FASTLY_API_KEY) {
  * @param  {Object} request options
  * @return {Promise} resolving to response
  */
-export function send({baseUrl, endpoint = '', form, headers = {}, method = 'GET', timeout = 5000}) {
+export function sendP({baseUrl, endpoint = '', form, headers = {}, method = 'GET', timeout = 5000}) {
 
   baseUrl = baseUrl || 'https://api.fastly.com'
 
@@ -53,95 +52,256 @@ export function send({baseUrl, endpoint = '', form, headers = {}, method = 'GET'
   })
 }
 
-export function purgeUrl(url, soft = false) {
+/**
+ * Instant Purge an individual URL. Soft Purging sets an object's TTL to 0s, forcing revalidation. For best results, Soft Purging should be used in conjuction with stale_while_revalidate and stale_if_error.
+ * @param  {string}  url
+ * @param  {Boolean} [soft=false]
+ * @return {Promise} resolves to parsed api result object
+ */
+export function purgeUrlP(url, soft = false) {
 
   const method  = 'PURGE'
   const headers = soft ? {'Fastly-Soft-Purge': 1} : {}
 
-  return send({baseUrl: url, method, headers})
+  return sendP({baseUrl: url, method, headers})
 }
 
-export function purge(service, key, soft = false) {
+/**
+ * Instant Purge a particular service of items tagged with a Surrogate Key. Soft Purging sets an object's TTL to 0s, forcing revalidation. For best results, Soft Purging should be used in conjuction with stale_while_revalidate and stale_if_error.
+ * @param  {string}  serviceId
+ * @param  {string}  key
+ * @param  {Boolean} [soft=false] sets an object's TTL to 0s
+ * @return {Promise} resolves to parsed api result object
+ */
+export function purgeP(serviceId, key, soft = false) {
 
   const method   = 'POST'
-  const endpoint = `service/${service}/purge/${key}`
+  const endpoint = `/service/${serviceId}/purge/${key}`
   const headers  = soft ? {'Fastly-Soft-Purge': 1} : {}
 
-  return send({endpoint, method, headers})
+  return sendP({endpoint, method, headers})
 }
 
-export function purgeAll(service) {
+/**
+ * Instant Purge everything from a service
+ * @param  {string} serviceId
+ * @return {Promise} resolves to parsed api result object
+ */
+export function purgeAllP(serviceId) {
 
   const method   = 'POST'
-  const endpoint = `service/${service}/purge_all`
+  const endpoint = `/service/${serviceId}/purge_all`
 
-  return send({endpoint, method})
+  return sendP({endpoint, method})
 }
 
-export function createBackend(service, version, params) {
+/**
+ * Create a backend for a particular service and version
+ * @param  {string} serviceId
+ * @param  {number} version
+ * @param  {Object} data  keys are backend object keys
+ * @return {Promise} resolves to parsed api result object
+ */
+export function createBackendP(serviceId, version, data) {
 
   const method   = 'POST'
-  const endpoint = `service/${service}/version/${version}/backend`
+  const endpoint = `/service/${serviceId}/version/${version}/backend`
 
-  return send({method, endpoint, form: params})
+  return sendP({method, endpoint, form: data})
 }
 
-export function deleteBackend(service, version, name) {
+/**
+ * Delete the backend for a particular service and version
+ * @param  {string} serviceId
+ * @param  {number} version
+ * @param  {string} name  name of backend
+ * @return {Promise} resolves to parsed api result object
+ */
+export function deleteBackendP(serviceId, version, name) {
 
   const method   = 'DELETE'
-  const endpoint = `service/${service}/version/${version}/backend/${name}`
+  const endpoint = `/service/${serviceId}/version/${version}/backend/${name}`
 
-  return send({method, endpoint})
+  return sendP({method, endpoint})
 }
 
-export function createService(name) {
+/**
+ * Create a service
+ * @param  {string} name
+ * @return {Promise} resolves to parsed api result object
+ */
+export function createServiceP(name) {
 
   const method   = 'POST'
   const endpoint = '/service'
   const params   = {name}
 
-  return send({method, endpoint, form: params})
+  return sendP({method, endpoint, form: params})
 }
 
-export function deleteService(id) {
+/**
+ * Create a version for a particular service
+ * @param  {string} serviceId
+ * @return {Promise} resolves to parsed api result object
+ */
+export function createServiceVersionP(serviceId) {
 
-  const method   = 'DELETE'
-  const endpoint = `/service/${id}`
+  const method   = 'POST'
+  const endpoint = `/service/${serviceId}/version`
 
-  return send({method, endpoint})
+  return sendP({method, endpoint})
 }
 
-export function renameService(id, newName) {
+/**
+ * Update a particular version for a particular service.
+ * @param  {string} serviceId
+ * @param  {number} version
+ * @param  {Object} data  keys are service object keys
+ * @return {Promise} resolves to parsed api result object
+ */
+export function updateServiceVersionP(serviceId, version, data) {
 
   const method   = 'PUT'
-  const endpoint = `/service/${id}`
+  const endpoint = `/service/${serviceId}/version/${version}`
+  const params   = data
+
+  return sendP({method, endpoint, form: params})
+}
+
+/**
+ * Validate the version for a particular service and version
+ * @param  {string} serviceId
+ * @param  {number} version
+ * @return {Promise} resolves to parsed api result object
+ */
+export function validateServiceVersionP(serviceId, version) {
+
+  const method   = 'GET'
+  const endpoint = `/service/${serviceId}/version/${version}/validate`
+
+  return sendP({method, endpoint})
+}
+
+/**
+ * Activate the current version
+ * @param  {string} serviceId
+ * @param  {number} version
+ * @return {Promise} resolves to parsed api result object
+ */
+export function activateServiceVersionP(serviceId, version) {
+
+  const method   = 'PUT'
+  const endpoint = `/service/${serviceId}/version/${version}/activate`
+
+  return sendP({method, endpoint})
+}
+
+/**
+ * Deactivate the current version
+ * @param  {string} serviceId
+ * @param  {number} version
+ * @return {Promise} resolves to parsed api result object
+ */
+export function deactivateServiceVersionP(serviceId, version) {
+
+  const method   = 'PUT'
+  const endpoint = `/service/${serviceId}/version/${version}/deactivate`
+
+  return sendP({method, endpoint})
+}
+
+/**
+ * Clone the current configuration into a new version
+ * @param  {string} serviceId
+ * @param  {number} version
+ * @return {Promise} resolves to parsed api result object
+ */
+export function cloneServiceVersion(serviceId, version) {
+
+  const method   = 'PUT'
+  const endpoint = `/service/${serviceId}/version/${version}/clone`
+
+  return sendP({method, endpoint})
+}
+
+/**
+ * Locks the specified version
+ * @param  {string} serviceId
+ * @param  {number} version
+ * @return {Promise} resolves to parsed api result object
+ */
+export function lockServiceVersion(serviceId, version) {
+
+  const method   = 'PUT'
+  const endpoint = `/service/${serviceId}/version/${version}/lock`
+
+  return sendP({method, endpoint})
+}
+
+/**
+ * Delete a service
+ * @param  {string} serviceId
+ * @return {Promise} resolves to parsed api result object
+ */
+export function deleteServiceP(serviceId) {
+
+  const method   = 'DELETE'
+  const endpoint = `/service/${serviceId}`
+
+  return sendP({method, endpoint})
+}
+
+/**
+ * Rename a service
+ * @param  {string} serviceId
+ * @param  {string} newName
+ * @return {Promise} resolves to parsed api result object
+ */
+export function renameServiceP(serviceId, newName) {
+
+  const method   = 'PUT'
+  const endpoint = `/service/${serviceId}`
   const params   = {name: newName}
 
-  return send({method, endpoint, form: params})
+  return sendP({method, endpoint, form: params})
 }
 
-export function getServices() {
+/**
+ * List services
+ * @return {Promise} resolves to parsed api result object
+ */
+export function ListServicesP() {
 
   const method   = 'GET'
-  const endpoint = 'service'
+  const endpoint = '/service'
 
-  return send({method, endpoint})
+  return sendP({method, endpoint})
 }
 
-export function getService(id) {
+/**
+ * Get a service by id
+ * @param  {string} serviceId
+ * @return {Promise} resolves to parsed api result object
+ */
+export function getServiceP(serviceId) {
 
   const method   = 'GET'
-  const endpoint = `service/${id}`
+  const endpoint = `/service/${serviceId}`
 
-  return send({method, endpoint})
+  return sendP({method, endpoint})
 }
 
-export function getServiceDetails(id) {
+/**
+ * List detailed information on a specified service
+ * @param  {string} serviceId
+ * @return {Promise} resolves to parsed api result object
+ */
+export function getServiceDetailsP(serviceId) {
 
   const method   = 'GET'
-  const endpoint = `service/${id}/details`
+  const endpoint = `/service/${serviceId}/details`
 
-  return send({method, endpoint})
+  return sendP({method, endpoint})
 }
 
 /**
@@ -149,10 +309,55 @@ export function getServiceDetails(id) {
  * @param  {string} service id
  * @return {Promise} resolves to deserialized response
  */
-export function getServiceDomains(id) {
+export function getServiceDomainsP(id) {
 
   const method   = 'GET'
-  const endpoint = `service/${id}/domain`
+  const endpoint = `/service/${id}/domain`
 
-  return send({method, endpoint})
+  return sendP({method, endpoint})
+}
+
+/**
+ * Create a domain for a particular service and version
+ * @param  {string} serviceId
+ * @param  {number} version
+ * @param  {Object} data  fastly domain object
+ * @return {Promise} resolves to parsed api result object
+ */
+export function createDomainP(serviceId, version, data) {
+
+  const method   = 'POST'
+  const endpoint = `/service/${serviceId}/version/${version}/domain`
+
+  return sendP({method, endpoint, form: data})
+}
+
+/**
+ * Create a new Request Settings object
+ * @param  {string} serviceId
+ * @param  {number} version
+ * @param  {Object} settings fastly request settings object: {hash_keys, action, ...}
+ * @return {Promise}
+ */
+export function createRequestSettingP(serviceId, version, settings) {
+
+  const method   = 'POST'
+  const endpoint = `/service/${serviceId}/version/${version}/request_settings`
+
+  return sendP({method, endpoint, form: settings})
+}
+
+/**
+ * Update the settings for a particular service and version
+ * @param  {string} serviceId
+ * @param  {number} version
+ * @param  {Object} settings  fastly settings object e.g. {general.default_host, general.default_ttl, ...}
+ * @return {Promise} resolves to parsed api result object
+ */
+export function updateSettingsP(serviceId, version, settings) {
+
+  const method   = 'PUT'
+  const endpoint = `/service/${serviceId}/version/${version}/settings`
+
+  return sendP({method, endpoint, form: settings})
 }
