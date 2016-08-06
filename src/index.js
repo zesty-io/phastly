@@ -338,9 +338,9 @@ export function sendP({baseUrl, form, endpoint = '', headers = {}, method = 'GET
   baseUrl = baseUrl || 'https://api.fastly.com'
 
   const fastlyKey = process.env.FASTLY_API_KEY
-  const uri       = `${baseUrl}/${endpoint}`
+  const url       = `${baseUrl}/${endpoint}`
 
-  if (uri === '/') {
+  if (url === '/') {
     throw new Error('missing baseUrl and/or endpoint!')
   }
 
@@ -353,7 +353,7 @@ export function sendP({baseUrl, form, endpoint = '', headers = {}, method = 'GET
 
   const options = {
     method,
-    uri,
+    url,
     headers: sendHeaders,
     timeout,
   }
