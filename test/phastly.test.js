@@ -20,6 +20,22 @@ test.before('create a new service', async t => {
   service = newService
 })
 
+test.serial('set the auth key', t => {
+
+  t.plan(1)
+
+  fastly.setApiKey('invalid')
+
+  return fastly.ListServicesP()
+  .then(() => {
+    throw new Error('api key should have been invalid')
+  })
+  .catch(() => {
+    fastly.setApiKey(process.env.FASTLY_API_KEY)
+    t.pass()
+  })
+})
+
 test('create backend', t => {
 
   const backendData = {
@@ -49,6 +65,10 @@ test('update settings', t => {
   }
 
   return fastly.updateSettingsP(service.id, 1, settingsData)
+})
+
+test('list services', t => {
+  return fastly.ListServicesP()
 })
 
 test.after('activate a service version', t => {

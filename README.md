@@ -1,23 +1,23 @@
 # phastly
 functional fastly api with promises. A simple, minimal node.js fastly api wrapper. Sends the requests out and gives you back promises which resolve to the parsed object.
 
+This library seeks to be developer friendly by providing promises and mapping each endpoint to a function for you, hopefully resulting in less time reading documentation: less fat-fingering of URLs, less forgetting http verbs.
+
 For information on request parameters and response formats, please read: <https://docs.fastly.com/api/>
+
+Currently in development and does not immediately seek to cover all endpoints but open to it. Pull requests and feature requests welcome.
 
 Tested with node4+
 
-Unlike current node fastly wrappers, this library seeks to add administrative endpoints such as adding and removing backends, in addition to purging.
-
-In development and does not immediately seek to cover all endpoints but open to it. Pull requests and feature requests welcome.
-
 ## Style - Why do all the functions end in "P"?
 
-This denotes a promise is being returned. It is a subjective style that I've adopted because unless you are using an IDE with really good type hinting you don't always know when a promise is being returned or not. And unlike other javascript types promises cannot and should not be silently coerced into their resolved value. Functions returning promises are always treated differently so this naming convention makes this behavior obvious.
+This denotes a promise is being returned. It is an opinionated style that I've adopted because unless you are using an IDE with really good type hinting you don't always know when a promise is being returned or not. And unlike other javascript types promises cannot and should not be silently coerced into their resolved value. Functions returning promises are always treated differently so this naming convention makes this behavior obvious.
 
 ## Usage
 
-Make sure that you are populating the environment variable `process.env.FASTLY_API_KEY`
+If set, phastly will automatically use the environment variable `process.env.FASTLY_API_KEY`. Or set/change the key with function `setApiKey()`
 
-This is a great project for pulling secrets from a file into the env: <https://www.npmjs.com/package/dotenv>
+This is a great project for populating env variables from a file: <https://www.npmjs.com/package/dotenv>
 
 ### Promises
 
@@ -98,6 +98,7 @@ phastly module.
     * [.checkAllDomainsP(serviceId, version)](#module_phastly.checkAllDomainsP) ⇒ <code>Promise</code>
     * [.createRequestSettingP(serviceId, version, settings)](#module_phastly.createRequestSettingP) ⇒ <code>Promise</code>
     * [.updateSettingsP(serviceId, version, settings)](#module_phastly.updateSettingsP) ⇒ <code>Promise</code>
+    * [.setApiKey(key)](#module_phastly.setApiKey)
     * [.sendP(request)](#module_phastly.sendP) ⇒ <code>Promise</code>
 
 <a name="module_phastly.purgeP"></a>
@@ -391,6 +392,17 @@ Update the settings for a particular service and version
 | serviceId | <code>string</code> |  |
 | version | <code>number</code> |  |
 | settings | <code>Object</code> | fastly settings object e.g. {general.default_host, general.default_ttl, ...} |
+
+<a name="module_phastly.setApiKey"></a>
+
+### phastly.setApiKey(key)
+set or change the fastly api key
+
+**Kind**: static method of <code>[phastly](#module_phastly)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>string</code> | your fastly api key |
 
 <a name="module_phastly.sendP"></a>
 

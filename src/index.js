@@ -1,9 +1,7 @@
 import request from 'request-promise'
 import ramda from 'ramda'
 
-if (!process.env.FASTLY_API_KEY) {
-  throw new Error('Missing env var FASTLY_API_KEY')
-}
+let fastlyApiKey = process.env.FASTLY_API_KEY
 
 /**
  * phastly module.
@@ -329,15 +327,26 @@ export function updateSettingsP(serviceId, version, settings) {
 }
 
 /**
+ * set or change the fastly api key
+ * @param {string} key your fastly api key
+ */
+export function setApiKey(key) {
+  fastlyApiKey = key
+}
+
+/**
  * Wrapper to send a fastly api request. Not for external use unless you want to send a custom request.
  * @param  {Object} request options: baseUrl (string), form (object), endpoint (string), headers (object), method (string), timeout (number)
  * @return {Promise} resolving to response
  */
 export function sendP({baseUrl, form, endpoint = '', headers = {}, method = 'GET', timeout = 5000}) {
 
+  if (!fastlyApiKey) {
+    throw new Error('Fastly API Key missing, try setting env var FASTLY_API_KEY')
+  }
+
   baseUrl = baseUrl || 'https://api.fastly.com'
 
-  const fastlyKey = process.env.FASTLY_API_KEY
   const url       = `${baseUrl}/${endpoint}`
 
   if (url === '/') {
@@ -345,7 +354,7 @@ export function sendP({baseUrl, form, endpoint = '', headers = {}, method = 'GET
   }
 
   const defaultHeaders = {
-    'Fastly-Key': fastlyKey,
+    'Fastly-Key': fastlyApiKey,
     'Accept': 'application/json'
   }
 
