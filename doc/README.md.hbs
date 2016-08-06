@@ -23,11 +23,13 @@ This is a great project for pulling secrets from a file into the env: <https://w
 
 ```js
 import * as fastly from 'phastly'
+// or
+// const fastly = require('phastly')
 
-function setup(name) {
-  fastly.createServiceP(name)
-  .then((newService) => {
-    // use newService here
+function setupP(name) {
+  return fastly.createServiceP(name)
+  .then((service) => {
+    // use service here
   })
 }
 ```
@@ -36,8 +38,8 @@ function setup(name) {
 ```js
 import * as fastly from 'phastly'
 
-async function setup(name) {
-  let newService = await fastly.createServiceP(name)
+async function setupP(name) {
+  let service = await fastly.createServiceP(name)
 
   const backendData = {
     name: service.name,
@@ -62,7 +64,8 @@ async function setup(name) {
   const p3 = fastly.updateSettingsP(service.id, 1, settingsData)
 
   await Promise.all([p1, p2, p3])
-  await fastly.activateServiceVersionP(service.id, 1)
+
+  return fastly.activateServiceVersionP(service.id, 1)
 
 }
 ```

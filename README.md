@@ -23,11 +23,13 @@ This is a great project for pulling secrets from a file into the env: <https://w
 
 ```js
 import * as fastly from 'phastly'
+// or
+// const fastly = require('phastly')
 
-function setup(name) {
-  fastly.createServiceP(name)
-  .then((newService) => {
-    // use newService here
+function setupP(name) {
+  return fastly.createServiceP(name)
+  .then((service) => {
+    // use service here
   })
 }
 ```
@@ -36,8 +38,8 @@ function setup(name) {
 ```js
 import * as fastly from 'phastly'
 
-async function setup(name) {
-  let newService = await fastly.createServiceP(name)
+async function setupP(name) {
+  let service = await fastly.createServiceP(name)
 
   const backendData = {
     name: service.name,
@@ -62,7 +64,8 @@ async function setup(name) {
   const p3 = fastly.updateSettingsP(service.id, 1, settingsData)
 
   await Promise.all([p1, p2, p3])
-  await fastly.activateServiceVersionP(service.id, 1)
+
+  return fastly.activateServiceVersionP(service.id, 1)
 
 }
 ```
@@ -72,9 +75,8 @@ phastly module.
 
 
 * [phastly](#module_phastly)
-    * [.sendP(request)](#module_phastly.sendP) ⇒ <code>Promise</code>
-    * [.purgeUrlP(url, [soft])](#module_phastly.purgeUrlP) ⇒ <code>Promise</code>
     * [.purgeP(serviceId, key, [soft])](#module_phastly.purgeP) ⇒ <code>Promise</code>
+    * [.purgeUrlP(url, [soft])](#module_phastly.purgeUrlP) ⇒ <code>Promise</code>
     * [.purgeAllP(serviceId)](#module_phastly.purgeAllP) ⇒ <code>Promise</code>
     * [.createBackendP(serviceId, version, data)](#module_phastly.createBackendP) ⇒ <code>Promise</code>
     * [.deleteBackendP(serviceId, version, name)](#module_phastly.deleteBackendP) ⇒ <code>Promise</code>
@@ -93,33 +95,10 @@ phastly module.
     * [.getServiceDetailsP(serviceId)](#module_phastly.getServiceDetailsP) ⇒ <code>Promise</code>
     * [.getServiceDomainsP(service)](#module_phastly.getServiceDomainsP) ⇒ <code>Promise</code>
     * [.createDomainP(serviceId, version, data)](#module_phastly.createDomainP) ⇒ <code>Promise</code>
+    * [.checkAllDomainsP(serviceId, version)](#module_phastly.checkAllDomainsP) ⇒ <code>Promise</code>
     * [.createRequestSettingP(serviceId, version, settings)](#module_phastly.createRequestSettingP) ⇒ <code>Promise</code>
     * [.updateSettingsP(serviceId, version, settings)](#module_phastly.updateSettingsP) ⇒ <code>Promise</code>
-
-<a name="module_phastly.sendP"></a>
-
-### phastly.sendP(request) ⇒ <code>Promise</code>
-send the fastly request
-
-**Kind**: static method of <code>[phastly](#module_phastly)</code>  
-**Returns**: <code>Promise</code> - resolving to response  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| request | <code>Object</code> | options |
-
-<a name="module_phastly.purgeUrlP"></a>
-
-### phastly.purgeUrlP(url, [soft]) ⇒ <code>Promise</code>
-Instant Purge an individual URL. Soft Purging sets an object's TTL to 0s, forcing revalidation. For best results, Soft Purging should be used in conjuction with stale_while_revalidate and stale_if_error.
-
-**Kind**: static method of <code>[phastly](#module_phastly)</code>  
-**Returns**: <code>Promise</code> - resolves to parsed api result object  
-
-| Param | Type | Default |
-| --- | --- | --- |
-| url | <code>string</code> |  | 
-| [soft] | <code>Boolean</code> | <code>false</code> | 
+    * [.sendP(request)](#module_phastly.sendP) ⇒ <code>Promise</code>
 
 <a name="module_phastly.purgeP"></a>
 
@@ -134,6 +113,19 @@ Instant Purge a particular service of items tagged with a Surrogate Key. Soft Pu
 | serviceId | <code>string</code> |  |  |
 | key | <code>string</code> |  |  |
 | [soft] | <code>Boolean</code> | <code>false</code> | sets an object's TTL to 0s |
+
+<a name="module_phastly.purgeUrlP"></a>
+
+### phastly.purgeUrlP(url, [soft]) ⇒ <code>Promise</code>
+Instant Purge an individual URL. Soft Purging sets an object's TTL to 0s, forcing revalidation. For best results, Soft Purging should be used in conjuction with stale_while_revalidate and stale_if_error.
+
+**Kind**: static method of <code>[phastly](#module_phastly)</code>  
+**Returns**: <code>Promise</code> - resolves to parsed api result object  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| url | <code>string</code> |  | 
+| [soft] | <code>Boolean</code> | <code>false</code> | 
 
 <a name="module_phastly.purgeAllP"></a>
 
@@ -360,6 +352,19 @@ Create a domain for a particular service and version
 | version | <code>number</code> |  |
 | data | <code>Object</code> | fastly domain object |
 
+<a name="module_phastly.checkAllDomainsP"></a>
+
+### phastly.checkAllDomainsP(serviceId, version) ⇒ <code>Promise</code>
+Check all domains' DNS for a particular service and version
+
+**Kind**: static method of <code>[phastly](#module_phastly)</code>  
+**Returns**: <code>Promise</code> - resolves to parsed api result object  
+
+| Param | Type |
+| --- | --- |
+| serviceId | <code>string</code> | 
+| version | <code>number</code> | 
+
 <a name="module_phastly.createRequestSettingP"></a>
 
 ### phastly.createRequestSettingP(serviceId, version, settings) ⇒ <code>Promise</code>
@@ -386,6 +391,18 @@ Update the settings for a particular service and version
 | serviceId | <code>string</code> |  |
 | version | <code>number</code> |  |
 | settings | <code>Object</code> | fastly settings object e.g. {general.default_host, general.default_ttl, ...} |
+
+<a name="module_phastly.sendP"></a>
+
+### phastly.sendP(request) ⇒ <code>Promise</code>
+Wrapper to send a fastly api request. Not for external use unless you want to send a custom request.
+
+**Kind**: static method of <code>[phastly](#module_phastly)</code>  
+**Returns**: <code>Promise</code> - resolving to response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| request | <code>Object</code> | options: baseUrl (string), form (object), endpoint (string), headers (object), method (string), timeout (number) |
 
 
 ## Documentation
