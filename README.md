@@ -9,7 +9,15 @@ Unlike current node fastly wrappers, this library seeks to add administrative en
 
 In development and does not immediately seek to cover all endpoints but open to it. Pull requests and feature requests welcome.
 
+## Style - Why do all the functions end in "P"?
+
+This denotes a promise is being returned. It is a subjective style that I've adopted because unless you are using an IDE with really good type hinting you don't always know when a promise is being returned or not. And unlike other javascript types promises cannot and should not be silently coerced into their resolved value. Functions returning promises are always treated differently so this naming convention makes this behavior obvious.
+
 ## Usage
+
+Make sure that you are populating the environment variable `process.env.FASTLY_API_KEY`
+
+This is a great project for pulling secrets from the env: <https://www.npmjs.com/package/dotenv>
 
 ### Promises
 
