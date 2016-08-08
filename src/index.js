@@ -10,10 +10,16 @@ let fastlyApiKey = process.env.FASTLY_API_KEY
 
 /**
  * Wrapper to send a fastly api request. Use this if the endpoint you need hasn't been mapped to a function.
- * @param  {Object} request options: baseUrl (string), form (object), endpoint (string), headers (object), method (string), timeout (number)
+ * @param  {Object} options
+ * @param  {Object} options.params parameters to upload with encoding: application/x-www-form-urlencoded
+ * @param  {string} options.baseUrl fastly api baseUrl (default: 'https://api.fastly.com')
+ * @param  {string} options.endpoint fastly api endpoint e.g. 'service/${serviceId}/version/${version}/backend' (default: '')
+ * @param  {Object} options.headers add to or overwrite the default headers (default: {'Fastly-Key', Accept})
+ * @param  {string} options.method the http method (default: GET)
+ * @param  {number} options.timeout the connection timeout in ms (default: 5000)
  * @return {Promise} resolving to response
  */
-export function sendP({baseUrl, form, endpoint = '', headers = {}, method = 'GET', timeout = 5000}) {
+export function sendP({params, baseUrl, endpoint = '', headers = {}, method = 'GET', timeout = 5000}) {
 
   if (!fastlyApiKey) {
     throw new Error('Fastly API Key missing, try setting env var FASTLY_API_KEY')
@@ -21,7 +27,7 @@ export function sendP({baseUrl, form, endpoint = '', headers = {}, method = 'GET
 
   baseUrl = baseUrl || 'https://api.fastly.com'
 
-  const url       = `${baseUrl}/${endpoint}`
+  const url = `${baseUrl}/${endpoint}`
 
   if (url === '/') {
     throw new Error('missing baseUrl and/or endpoint!')
@@ -35,7 +41,7 @@ export function sendP({baseUrl, form, endpoint = '', headers = {}, method = 'GET
   const sendHeaders = ramda.merge(defaultHeaders, headers)
 
   const options = {
-    form,
+    form: params,
     headers: sendHeaders,
     method,
     timeout,
@@ -110,7 +116,7 @@ export function createBackendP(serviceId, version, data) {
   const method   = 'POST'
   const endpoint = `/service/${serviceId}/version/${version}/backend`
 
-  return sendP({method, endpoint, form: data})
+  return sendP({method, endpoint, params: data})
 }
 
 /**
@@ -139,7 +145,7 @@ export function createServiceP(name) {
   const endpoint = '/service'
   const params   = {name}
 
-  return sendP({method, endpoint, form: params})
+  return sendP({method, endpoint, params})
 }
 
 /**
@@ -168,7 +174,7 @@ export function updateServiceVersionP(serviceId, version, data) {
   const endpoint = `/service/${serviceId}/version/${version}`
   const params   = data
 
-  return sendP({method, endpoint, form: params})
+  return sendP({method, endpoint, params})
 }
 
 /**
@@ -265,7 +271,7 @@ export function renameServiceP(serviceId, newName) {
   const endpoint = `/service/${serviceId}`
   const params   = {name: newName}
 
-  return sendP({method, endpoint, form: params})
+  return sendP({method, endpoint, params})
 }
 
 /**
@@ -327,7 +333,7 @@ export function createDomainP(serviceId, version, data) {
   const method   = 'POST'
   const endpoint = `/service/${serviceId}/version/${version}/domain`
 
-  return sendP({method, endpoint, form: data})
+  return sendP({method, endpoint, params: data})
 }
 
 /**
@@ -355,7 +361,7 @@ export function createRequestSettingP(serviceId, version, settings) {
   const method   = 'POST'
   const endpoint = `/service/${serviceId}/version/${version}/request_settings`
 
-  return sendP({method, endpoint, form: settings})
+  return sendP({method, endpoint, params: settings})
 }
 
 /**
@@ -370,7 +376,7 @@ export function updateSettingsP(serviceId, version, settings) {
   const method   = 'PUT'
   const endpoint = `/service/${serviceId}/version/${version}/settings`
 
-  return sendP({method, endpoint, form: settings})
+  return sendP({method, endpoint, params: settings})
 }
 
 /**

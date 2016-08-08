@@ -66,7 +66,6 @@ async function setupP(name) {
   await Promise.all([p1, p2, p3])
 
   return fastly.activateServiceVersionP(service.id, 1)
-
 }
 ```
 
@@ -75,7 +74,7 @@ phastly module.
 
 
 * [phastly](#module_phastly)
-    * [.sendP(request)](#module_phastly.sendP) ⇒ <code>Promise</code>
+    * [.sendP(options)](#module_phastly.sendP) ⇒ <code>Promise</code>
     * [.purgeP(serviceId, key, [soft])](#module_phastly.purgeP) ⇒ <code>Promise</code>
     * [.purgeUrlP(url, [soft])](#module_phastly.purgeUrlP) ⇒ <code>Promise</code>
     * [.purgeAllP(serviceId)](#module_phastly.purgeAllP) ⇒ <code>Promise</code>
@@ -103,7 +102,7 @@ phastly module.
 
 <a name="module_phastly.sendP"></a>
 
-### phastly.sendP(request) ⇒ <code>Promise</code>
+### phastly.sendP(options) ⇒ <code>Promise</code>
 Wrapper to send a fastly api request. Use this if the endpoint you need hasn't been mapped to a function.
 
 **Kind**: static method of <code>[phastly](#module_phastly)</code>  
@@ -111,7 +110,13 @@ Wrapper to send a fastly api request. Use this if the endpoint you need hasn't b
 
 | Param | Type | Description |
 | --- | --- | --- |
-| request | <code>Object</code> | options: baseUrl (string), form (object), endpoint (string), headers (object), method (string), timeout (number) |
+| options | <code>Object</code> |  |
+| options.params | <code>Object</code> | parameters to upload with encoding: application/x-www-form-urlencoded |
+| options.baseUrl | <code>string</code> | fastly api baseUrl (default: 'https://api.fastly.com') |
+| options.endpoint | <code>string</code> | fastly api endpoint e.g. 'service/${serviceId}/version/${version}/backend' (default: '') |
+| options.headers | <code>Object</code> | add to or overwrite the default headers (default: {'Fastly-Key', Accept}) |
+| options.method | <code>string</code> | the http method (default: GET) |
+| options.timeout | <code>number</code> | the connection timeout in ms (default: 5000) |
 
 <a name="module_phastly.purgeP"></a>
 
