@@ -275,6 +275,20 @@ export function renameServiceP(serviceId, newName) {
 }
 
 /**
+ * helper function - get active version from a fastly version list
+ * @param  {Object[]} versions of the service
+ * @return {Object} version information
+ */
+export function filterActiveVersion(versions) {
+
+  const actives = ramda.filter((version) => {
+    return version.active === true
+  }, versions)
+
+  return actives[0]
+}
+
+/**
  * List services
  * @return {Promise} resolves to parsed api result object
  */
@@ -293,6 +307,18 @@ export function ListServicesP() {
 export function getServiceP(serviceId) {
 
   const endpoint = `/service/${serviceId}`
+
+  return sendP({endpoint})
+}
+
+/**
+ * Get a service by name
+ * @param  {string} name name of service
+ * @return {Promise} resolves to parsed api result object
+ */
+export function getServiceByNameP(name) {
+
+  const endpoint = `/service/search?name=${encodeURIComponent(name)}`
 
   return sendP({endpoint})
 }

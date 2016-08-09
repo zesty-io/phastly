@@ -9,7 +9,7 @@ Currently in development and does not immediately seek to cover all endpoints bu
 
 Tested with node4+
 
-## Style - Why do all the functions end in "P"?
+## Style - Why do most functions end in "P"?
 
 This denotes a promise is being returned. It is an opinionated style that I've adopted because unless you are using an IDE with really good type hinting you don't always know when a promise is being returned or not. And unlike other javascript types promises cannot and should not be silently coerced into their resolved value. Functions returning promises are always treated differently so this naming convention makes this behavior obvious.
 
@@ -90,8 +90,10 @@ phastly module.
     * [.lockServiceVersion(serviceId, version)](#module_phastly.lockServiceVersion) ⇒ <code>Promise</code>
     * [.deleteServiceP(serviceId)](#module_phastly.deleteServiceP) ⇒ <code>Promise</code>
     * [.renameServiceP(serviceId, newName)](#module_phastly.renameServiceP) ⇒ <code>Promise</code>
+    * [.filterActiveVersion(versions)](#module_phastly.filterActiveVersion) ⇒ <code>Object</code>
     * [.ListServicesP()](#module_phastly.ListServicesP) ⇒ <code>Promise</code>
     * [.getServiceP(serviceId)](#module_phastly.getServiceP) ⇒ <code>Promise</code>
+    * [.getServiceByNameP(name)](#module_phastly.getServiceByNameP) ⇒ <code>Promise</code>
     * [.getServiceDetailsP(serviceId)](#module_phastly.getServiceDetailsP) ⇒ <code>Promise</code>
     * [.getServiceDomainsP(service)](#module_phastly.getServiceDomainsP) ⇒ <code>Promise</code>
     * [.createDomainP(serviceId, version, data)](#module_phastly.createDomainP) ⇒ <code>Promise</code>
@@ -313,6 +315,18 @@ Rename a service
 | serviceId | <code>string</code> | 
 | newName | <code>string</code> | 
 
+<a name="module_phastly.filterActiveVersion"></a>
+
+### phastly.filterActiveVersion(versions) ⇒ <code>Object</code>
+helper function - get active version from a fastly version list
+
+**Kind**: static method of <code>[phastly](#module_phastly)</code>  
+**Returns**: <code>Object</code> - version information  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| versions | <code>Array.&lt;Object&gt;</code> | of the service |
+
 <a name="module_phastly.ListServicesP"></a>
 
 ### phastly.ListServicesP() ⇒ <code>Promise</code>
@@ -331,6 +345,18 @@ Get a service by id
 | Param | Type |
 | --- | --- |
 | serviceId | <code>string</code> | 
+
+<a name="module_phastly.getServiceByNameP"></a>
+
+### phastly.getServiceByNameP(name) ⇒ <code>Promise</code>
+Get a service by name
+
+**Kind**: static method of <code>[phastly](#module_phastly)</code>  
+**Returns**: <code>Promise</code> - resolves to parsed api result object  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | name of service |
 
 <a name="module_phastly.getServiceDetailsP"></a>
 
