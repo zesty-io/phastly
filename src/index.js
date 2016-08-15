@@ -43,6 +43,7 @@ export function sendP({params, baseUrl, endpoint = '', headers = {}, method = 'G
   const options = {
     form: params,
     headers: sendHeaders,
+    json: true,
     method,
     timeout,
     url,
@@ -57,7 +58,7 @@ export function sendP({params, baseUrl, endpoint = '', headers = {}, method = 'G
       throw new Error(`request failed with sanitized options: ${JSON.stringify(optionsLog)}`)
     }
 
-    return JSON.parse(response)
+    return response
   })
 }
 
