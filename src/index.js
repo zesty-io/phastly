@@ -149,6 +149,19 @@ export function createServiceP(name) {
 }
 
 /**
+ * Update a service
+ * @param  {Object} params key/values of paramters to update
+ * @return {Promise} resolves to parsed api result object
+ */
+export function updateServiceP(serviceId, params) {
+
+  const method   = 'PUT'
+  const endpoint = `/service/${serviceId}`
+
+  return sendP({method, endpoint, params})
+}
+
+/**
  * Create a version for a particular service
  * @param  {string} serviceId
  * @return {Promise} resolves to parsed api result object

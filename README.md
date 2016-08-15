@@ -81,6 +81,7 @@ phastly module.
     * [.createBackendP(serviceId, version, data)](#module_phastly.createBackendP) ⇒ <code>Promise</code>
     * [.deleteBackendP(serviceId, version, name)](#module_phastly.deleteBackendP) ⇒ <code>Promise</code>
     * [.createServiceP(name)](#module_phastly.createServiceP) ⇒ <code>Promise</code>
+    * [.updateServiceP(params)](#module_phastly.updateServiceP) ⇒ <code>Promise</code>
     * [.createServiceVersionP(serviceId)](#module_phastly.createServiceVersionP) ⇒ <code>Promise</code>
     * [.updateServiceVersionP(serviceId, version, data)](#module_phastly.updateServiceVersionP) ⇒ <code>Promise</code>
     * [.validateServiceVersionP(serviceId, version)](#module_phastly.validateServiceVersionP) ⇒ <code>Promise</code>
@@ -198,6 +199,18 @@ Create a service
 | Param | Type |
 | --- | --- |
 | name | <code>string</code> | 
+
+<a name="module_phastly.updateServiceP"></a>
+
+### phastly.updateServiceP(params) ⇒ <code>Promise</code>
+Update a service
+
+**Kind**: static method of <code>[phastly](#module_phastly)</code>  
+**Returns**: <code>Promise</code> - resolves to parsed api result object  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| params | <code>Object</code> | key/values of paramters to update |
 
 <a name="module_phastly.createServiceVersionP"></a>
 
