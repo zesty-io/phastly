@@ -1,6 +1,6 @@
 {
   "name": "phastly",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "(P)romises for F(hastly) - functional fastly api with promises",
   "main": "build/index.js",
   "scripts": {
